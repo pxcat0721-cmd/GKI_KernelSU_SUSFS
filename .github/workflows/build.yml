@@ -1147,17 +1147,7 @@ jobs:
           echo "CONFIG_BBG=y" >> common/arch/arm64/configs/gki_defconfig
           sed -i '/^config LSM$/,/^help$/{ /^[[:space:]]*default/ { /baseband_guard/! s/selinux/selinux,baseband_guard/ } }' common/security/Kconfig
 
-      - name: 注入NTsync内核配置
-        run: |
-            cd "$KERNEL_ROOT"
-            cd ./common
-            wget "https://raw.githubusercontent.com/Goldzxcbug/Droidspaces_Kernel_patch/refs/heads/main/NTsync/ntsync_base.patch"
-            wget "https://raw.githubusercontent.com/Goldzxcbug/Droidspaces_Kernel_patch/refs/heads/main/NTsync/ntsync_compat_android14-6.1.patch"
-            patch -p1 < 'ntsync_base.patch'
-            patch -p1 < 'ntsync_compat_android14-6.1.patch'            
-            cd ../
-            #开启NTsync内核配置
-            echo "CONFIG_NTSYNC=y" >> ./common/arch/arm64/configs/gki_defconfig
+    
       - name: 应用 Re-Kernel
         if: inputs.use_rekernel
         working-directory: ${{ env.KERNEL_ROOT }}
